@@ -1,0 +1,32 @@
+version: "3"
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: "springboot-docker-mongodb-redis-database"
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: example
+  
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+  
+  springboot-mongodb:
+    image: springboot-docker-mongodb-redis:latest
+    container_name: springboot-docker-mongodb-redis-app
+    depends_on:
+      - mongodb
+    ports:
+      - 8181:8181
+    links:
+      - mongodb
+    environment:
+      SPRING_DATA_MONGODB_HOST: mongodb:27017
+      SPRING_DATA_MONGODB_PORT: 27017
+      SPRING_DATA_MONGODB_USERNAME: admin
+      SPRING_DATA_MONGODB_PASSWORD: example
+      SPRING_DATA_MONGODB_DATABASE: phoneBook
+    
